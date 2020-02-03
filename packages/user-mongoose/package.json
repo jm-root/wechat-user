@@ -1,0 +1,33 @@
+{
+  "name": "user-mongoose",
+  "version": "0.0.1",
+  "description": "mongoose adapter for user",
+  "main": "./lib/index",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jm-root/wechat-user.git"
+  },
+  "keywords": [
+    "javascript",
+    "user"
+  ],
+  "author": {
+    "name": "Jeff YU"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jm-root/wechat-user/issues"
+  },
+  "homepage": "https://github.com/jm-root/wechat-user",
+  "dependencies": {
+    "mongoose": "^5.8.11",
+    "jm-ms-mongoose": "^2.0.1"
+  },
+  "devDependencies": {},
+  "jest": {
+    "testEnvironment": "node"
+  }
+}

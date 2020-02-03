@@ -1,0 +1,66 @@
+openapi: 3.0.0
+servers:
+  - url: https://gateway.jamma.cn/passport/weapp
+info:
+  version: "1.0.0"
+  title: wechat-user-api
+  description: 微信用户服务，依赖user服务
+paths:
+  /signon/mp:
+    description: 公众号用户登陆
+    post:
+      responses:
+        '200':
+          description: 登陆成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenInfo'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInfo'
+  /signon/weapp:
+    description: 微信小程序用户登陆
+    post:
+      responses:
+        '200':
+          description: 登陆成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenInfo'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInfo'
+components:
+  schemas:
+    LoginInfo:
+      type: object
+      properties:
+        unionid:
+          type: string
+        openid:
+          type: string
+      description: 登陆信息
+    TokenInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '596d5cb3baeeaf00203de4ec'
+        token:
+          type: string
+          example: '3a90dd3a53914eae857793297738574a85ae74e5914fce723b9dc82d562a31cf'
+        expire:
+          type: integer
+          format: int32
+          example: 3600
+        time:
+          type: integer
+          format: int64
+          example: 1524634308844
+      description: Token信息

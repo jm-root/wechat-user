@@ -1,7 +1,7 @@
 module.exports = {
   gateway: 'gateway',
-  redis: 'redis',
-  mysql: 'mysql',
+  db: 'db',
+  force_unionid: 'force_unionid',
   service_name: 'service_name',
   modules: {
     'jm-server-jaeger': {

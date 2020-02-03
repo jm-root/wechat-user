@@ -1,0 +1,32 @@
+{
+  "name": "user",
+  "version": "0.0.1",
+  "description": "wechat user for passport-wechat and passport-weapp",
+  "main": "./lib/index",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jm-root/passport.git"
+  },
+  "keywords": [
+    "javascript",
+    "passport"
+  ],
+  "author": {
+    "name": "Jeff YU"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jm-root/passport/issues"
+  },
+  "homepage": "https://github.com/jm-root/passport",
+  "dependencies": {
+    "jm-utils":"^1.0.3"
+  },
+  "devDependencies": {},
+  "jest": {
+    "testEnvironment": "node"
+  }
+}

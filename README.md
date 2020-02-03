@@ -32,3 +32,5 @@
 | 配置项 | 默认值 | 描述 |
 | :-: | :-: | :-: |
 |gateway| [] | Gateway服务器Uri |
+|db| [] | 数据库uri |
+|force_unionid| [0] | 是否强制获取unionid, 默认0：不强制 1：强制 |

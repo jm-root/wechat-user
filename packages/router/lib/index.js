@@ -7,15 +7,15 @@ const loadRouter = require('./loadRouter')
 const ms = new MS()
 
 class Router {
-  constructor (service, { dir }) {
+  constructor (service, { dir, nohelp }) {
     const router = ms.router()
     this.router = router
     service.rootRouter = router
 
     wrapper(service.t)(router)
 
+    !nohelp && (router.use(help(service, dir)))
     router
-      .use(help(service, dir))
       .use(function (opts) {
         if (!service.ready) throw error.err(error.Err.FA_NOTREADY)
       })

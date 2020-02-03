@@ -1,0 +1,13 @@
+{
+  "name": "main",
+  "version": "1.0.0",
+  "main": "./lib/index",
+  "author": {
+    "name": "Jeff YU"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
