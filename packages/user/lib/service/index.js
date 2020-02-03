@@ -71,29 +71,31 @@ module.exports = class extends require('service') {
    * @returns {Promise<*>}
    */
   async signon (opts = {}, ips) {
-    const { backend: router, gateway: { sso, user } } = this
+    const { backend: router, gateway: { user } } = this
     logger.debug('signon', opts, ips)
-    const { mpOpenid, weappOpenid, unionid, session_key: sessionKey, nickName, gender, country, province, city, avatarUrl } = opts
+    const { mpOpenid, weappOpenid, unionid, sessionKey } = opts
 
-    const wechat = { unionid }
+    const q = {}
+    const wechat = {}
+    if (unionid) {
+      q.unionid = unionid
+      wechat.unionid = unionid
+    }
 
     if (mpOpenid) {
+      q.mpOpenid = mpOpenid
       wechat.mp = {
         openid: mpOpenid
       }
     }
 
     if (weappOpenid) {
+      q.weappOpenid = weappOpenid
       wechat.weapp = {
         openid: weappOpenid,
         sessionKey
       }
     }
-
-    const q = {}
-    unionid && (q.unionid = unionid)
-    mpOpenid && (q.mpOpenid = mpOpenid)
-    weappOpenid && (q.weappOpenid = weappOpenid)
 
     // 检查是否已经存在
     let doc = await router.get('/findOne', q)
@@ -104,17 +106,10 @@ module.exports = class extends require('service') {
       }
     }
 
-    Object.assign(data, {
-      nick: nickName,
-      gender,
-      country,
-      province,
-      city,
-      avatarUrl
-    })
+    Object.assign(data, opts)
 
     if (doc) {
-      let ext = data.ext
+      const ext = data.ext
       await user.post(`/users/${doc.id}/ext`, ext)
       logger.debug('update user', doc.id, ext)
       await router.post(`/${doc.id}`, opts)
@@ -124,20 +119,13 @@ module.exports = class extends require('service') {
         throw error.err(consts.Err.FA_INVALID_UNIONID)
       }
       doc = await user.request({ uri: '/users', type: 'post', data, ips })
-      if (doc.err) throw error.err(doc)
       logger.debug('create user', data)
 
-      data = Object.assign({}, wechat, { id: doc.id })
-      doc = await router.post(`/`, data)
+      data = Object.assign({}, opts, { id: doc.id })
+      doc = await router.post(`/`, opts)
       logger.debug('create wechat user', data, doc)
     }
-    data = {
-      id: doc.id,
-      wechat
-    }
-    doc = await sso.request({ uri: '/signon', type: 'post', data, ips })
-    if (doc.err) throw error.err(doc)
-    return doc
+    return { id: doc.id }
   }
 
   async remove (id) {
