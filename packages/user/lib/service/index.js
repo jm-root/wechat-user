@@ -70,10 +70,10 @@ module.exports = class extends require('service') {
    * @param ips
    * @returns {Promise<*>}
    */
-  async signon (opts = {}, ips) {
+  async signon (opts = {}, ips, type) {
     const { backend: router, gateway: { user } } = this
     logger.debug('signon', opts, ips)
-    const { mpOpenid, weappOpenid, unionid, sessionKey } = opts
+    const { openid, unionid } = opts
 
     const q = {}
     const wechat = {}
@@ -82,19 +82,12 @@ module.exports = class extends require('service') {
       wechat.unionid = unionid
     }
 
-    if (mpOpenid) {
-      q.mpOpenid = mpOpenid
-      wechat.mp = {
-        openid: mpOpenid
-      }
-    }
-
-    if (weappOpenid) {
-      q.weappOpenid = weappOpenid
-      wechat.weapp = {
-        openid: weappOpenid,
-        sessionKey
-      }
+    if (type === 'mp') {
+      q.mpOpenid = openid
+      wechat.mp = opts
+    } else if (type === 'weapp') {
+      q.weappOpenid = openid
+      wechat.weapp = opts
     }
 
     // 检查是否已经存在
@@ -112,18 +105,18 @@ module.exports = class extends require('service') {
       const ext = data.ext
       await user.post(`/users/${doc.id}/ext`, ext)
       logger.debug('update user', doc.id, ext)
-      await router.post(`/${doc.id}`, opts)
-      logger.debug('update wechat user', doc.id, wechat)
+      await router.post(`/${doc.id}`, q)
+      logger.debug('update wechat user', doc.id, q)
     } else {
       if (this.forceUnionid && !unionid) {
         throw error.err(consts.Err.FA_INVALID_UNIONID)
       }
       doc = await user.request({ uri: '/users', type: 'post', data, ips })
-      logger.debug('create user', data)
+      logger.debug('create user', { ...data, ...doc })
 
-      data = Object.assign({}, opts, { id: doc.id })
-      doc = await router.post(`/`, opts)
-      logger.debug('create wechat user', data, doc)
+      data = Object.assign({}, q, doc)
+      doc = await router.post(`/`, data)
+      logger.debug('create wechat user', data)
     }
     return { id: doc.id }
   }
@@ -133,6 +126,6 @@ module.exports = class extends require('service') {
     const doc = await router.get('/findone', { id })
     if (!doc) return
     await router.delete(`/${id}`)
-    await user.delete(`/users/${doc.bindId || id}`)
+    await user.delete(`/users/${id}`)
   }
 }

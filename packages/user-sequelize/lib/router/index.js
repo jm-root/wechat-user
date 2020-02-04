@@ -26,7 +26,6 @@ module.exports = function (service, opts = {}) {
       const { user } = service
       const q = Object.keys(data).map(key => {
         const value = data[key]
-        key === '_id' && (key = 'id')
         const o = {}
         o[key] = value
         return o
@@ -39,8 +38,6 @@ module.exports = function (service, opts = {}) {
         },
         raw: true
       })
-
-      doc && (doc._id = doc.id)
 
       return doc
     })
@@ -77,9 +74,6 @@ module.exports = function (service, opts = {}) {
       }
       opts.conditions = { [Op.or]: c }
     })
-    .add('/', 'post', async ({ data }) => {
-      data._id && (data.id = data._id)
-    })
 
   service.onReady()
     .then(() => {
@@ -88,25 +82,6 @@ module.exports = function (service, opts = {}) {
         list: listOpts,
         get: getOpts
       }))
-
-      // 拦截处理_id
-      user
-        .on('list', (opts, doc) => {
-          if (doc && doc.rows) {
-            for (const item of doc.rows) {
-              item.id && (item._id = item.id)
-            }
-          }
-        })
-        .on('get', (opts, doc) => {
-          if (doc) {
-            const item = doc
-            item.id && (item._id = item.id)
-          }
-        })
-        .on('create', (opts, doc) => {
-          doc && (doc._id = doc.id)
-        })
     })
 
   return router

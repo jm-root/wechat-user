@@ -2,6 +2,11 @@ const $ = require('./service')
 
 const unionid = 'test_unionid'
 const openid = 'test_openid'
+const data = {
+  unionid,
+  openid,
+  avatarUrl: 'http://www.baidu.com'
+}
 
 let service = null
 let router = null
@@ -19,18 +24,18 @@ afterAll(async () => {
 
 test('signon', async () => {
   console.log('sigon on.....')
-  const doc = await router.post('/signon', { unionid, headimgurl: 'http://www.baidu.com' })
+  const doc = await router.post('/signon', data)
   console.log(doc)
 })
 
 test('signon mp', async () => {
   console.log('sigon on mp.....')
-  const doc = await router.post('/signon/mp', { unionid, openid, headimgurl: 'http://www.baidu.com' })
+  const doc = await router.post('/signon/mp', data)
   console.log(doc)
 })
 
 test('signon weapp', async () => {
   console.log('sigon on weapp.....')
-  const doc = await router.post('/signon/weapp', { unionid, openid, headimgurl: 'http://www.baidu.com' })
+  const doc = await router.post('/signon/weapp', data)
   console.log(doc)
 })

@@ -9,12 +9,7 @@ module.exports = function (service) {
       return service.signon(data, ips)
     })
     .add('/signon/:prefix', 'post', async ({ params: { prefix }, data, ips }) => {
-      const _data = { ...data }
-      if (data.openid) {
-        _data[`${prefix}Openid`] = data.openid
-        delete _data.openid
-      }
-      return service.signon(_data, ips)
+      return service.signon(data, ips, prefix)
     })
 
   service.onReady()
