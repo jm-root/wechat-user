@@ -11,6 +11,9 @@ module.exports = function (service) {
     .add('/signon/:prefix', 'post', async ({ params: { prefix }, data, ips }) => {
       return service.signon(data, ips, prefix)
     })
+    .add('/users/:id', 'delete', async ({ params: { id } }) => {
+      return service.remove(id)
+    })
 
   service.onReady()
     .then(() => {

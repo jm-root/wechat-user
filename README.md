@@ -1,6 +1,6 @@
-# server-template
+# wechat-user
 
-服务器模板
+微信用户
 
 ## <a name="环境变量">环境变量</a>
 

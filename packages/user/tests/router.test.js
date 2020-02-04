@@ -17,9 +17,9 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  const { backend: router } = service
-  const doc = await router.get('/findone', { unionid })
-  await service.remove(doc.id)
+  const { backend } = service
+  const doc = await backend.get('/findone', { unionid })
+  await router.delete(`/users/${doc.id}`)
 })
 
 test('signon', async () => {

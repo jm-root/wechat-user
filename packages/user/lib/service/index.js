@@ -127,5 +127,6 @@ module.exports = class extends require('service') {
     if (!doc) return
     await router.delete(`/${id}`)
     await user.delete(`/users/${id}`)
+    return { ret: 1 }
   }
 }
